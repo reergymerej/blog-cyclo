@@ -1,9 +1,15 @@
 const fromHash = (hash) => (key) => hash[key]
 
-const ifThenElse = (fn, truthy, falsy) => (...args) =>
-  fn(...args)
-    ? truthy(...args)
-    : falsy(...args)
+const conditionallyExecute = ([test, truthyFn]) => (...args) => {
+  if (test(...args)) {
+    return truthyFn(...args)
+  }
+}
+
+const ternary = (fn, truthy, falsy) => (...args) => {
+  return conditionallyExecute([ fn, truthy ])(...args)
+    || falsy(...args)
+}
 
 const both = (x) => (a, b) => (a === x && b === x)
 const either = (x) => (a, b) => (a === x || b === x)
@@ -21,8 +27,8 @@ const positive = get('positive')
 const negative = get('negative')
 const undef = get()
 
-const parityAdditionBothOdd = ifThenElse(bothOdd, even, undef)
-const parityAdditionEitherOdd = ifThenElse(eitherOdd, odd, undef)
+const parityAdditionBothOdd = ternary(bothOdd, even, undef)
+const parityAdditionEitherOdd = ternary(eitherOdd, odd, undef)
 
 // 3
 const doubleCheck = (cond1, fn1, cond2, fn2, defaultFn) => (a, b) => {
