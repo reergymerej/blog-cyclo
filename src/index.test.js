@@ -43,13 +43,23 @@ describe('getProductSign', () => {
 
 describe('getParity', () => {
   const input = [
-    ['even', 'even', 'even'],
-    ['even', 'odd', 'odd'],
-    ['odd', 'even', 'odd'],
-    ['odd', 'odd', 'even'],
+    ['addition', 'even', 'even', 'even'],
+    ['addition', 'even', 'odd', 'odd'],
+    ['addition', 'odd', 'even', 'odd'],
+    ['addition', 'odd', 'odd', 'even'],
+
+    ['subtration', 'even', 'even', 'even'],
+    ['subtration', 'even', 'odd', 'odd'],
+    ['subtration', 'odd', 'even', 'odd'],
+    ['subtration', 'odd', 'odd', 'even'],
+
+    ['multiplication', 'even', 'even', 'even'],
+    ['multiplication', 'even', 'odd', 'even'],
+    ['multiplication', 'odd', 'even', 'even'],
+    ['multiplication', 'odd', 'odd', 'odd'],
   ]
 
-  test.each(input)('getParity(%s, %s)', (a, b, expected) => {
-    expect(mod.getParity(a, b)).toBe(expected)
+  test.each(input)('getParity(%s, %s)', (operation, a, b, expected) => {
+    expect(mod.getParity(operation, a, b)).toBe(expected)
   })
 })
