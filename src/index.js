@@ -1,23 +1,27 @@
+// 3
+const mixRed = (a) => {
+  if (a === 'yellow') {
+    return 'orange'
+  } else if (a === 'blue') {
+    return 'purple'
+  }
+}
+
+const mixBlue = (a) => {
+  if (a === 'yellow') {
+    return 'green'
+  }
+}
+
+// 5
 export const mixColors = (a, b) => {
   if (a === 'red') {
-    if (b === 'yellow') {
-      return 'orange'
-    } else if (b === 'blue') {
-      return 'purple'
-    }
+    return mixRed(b)
   } else if (b === 'red') {
-    if (a === 'yellow') {
-      return 'orange'
-    } else if (a === 'blue') {
-      return 'purple'
-    }
+    return mixRed(a)
   } else if (a === 'blue') {
-    if (b === 'yellow') {
-      return 'green'
-    }
+    return mixBlue(b)
   } else if (b === 'blue') {
-    if (a === 'yellow') {
-      return 'green'
-    }
+    return mixBlue(a)
   }
 }
