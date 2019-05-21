@@ -5,10 +5,10 @@ export const conditionallyCall = (list, defaultFn) => (...args) => {
     : defaultFn(...args)
 }
 
-export const ternaryDo = (testFn, truthyFn, falsyFn) => (...args) =>
+export const doTernary = (testFn, truthyFn, falsyFn) => (...args) =>
   conditionallyCall([[ testFn, truthyFn ]], falsyFn)(...args)
 
-export const ifThen = (testFn, truthyFn) => ternaryDo(testFn, truthyFn, undef)
+export const ifThen = (testFn, truthyFn) => doTernary(testFn, truthyFn, undef)
 
 export const both = (x) => (a, b) => (a === x && b === x)
 export const either = (x) => (a, b) => (a === x || b === x)
@@ -37,3 +37,5 @@ export const applyToOtherArg = (fn, value) => conditionallyCall([
 export const prefix = (a, b) => `${a}${b}`
 export const has = (value) => (a, b) => a === value || b === value
 export const equal = (a, b) => a === b
+
+export const testArg = (n, isFn) => applyToArgs(isFn, [n])

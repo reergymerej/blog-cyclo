@@ -3,6 +3,7 @@ import {
   applyToOtherArg,
   both,
   conditionallyCall,
+  doTernary,
   either,
   equal,
   first,
@@ -11,7 +12,7 @@ import {
   ifThen,
   is,
   prefix,
-  ternaryDo,
+  testArg,
   undef,
 } from './util'
 
@@ -36,7 +37,7 @@ const getParityAddition = conditionallyCall([
 ], even)
 
 const mixRed = conditionallyCall([
-  [ applyToArgs(isYellow, [0]),
+  [ testArg(0, isYellow),
     get('orange'),
   ],
   [ applyToArgs(is('blue'), [0]),
@@ -51,10 +52,13 @@ export const mixColors = conditionallyCall([
   [hasBlue, applyToOtherArg(mixBlue, 'blue')],
 ], undef)
 
-export const getParity = ternaryDo(
-  applyToArgs(is('multiplication'), [0]),
-  applyToArgs(ternaryDo(equal, first, even), [1, 2]),
-  applyToArgs(getParityAddition, [1, 2]),
+export const getParity = doTernary(
+  testArg(0, is('multiplication')),
+  applyToArgs(doTernary(
+      equal,
+        first,
+        even), [1, 2]),
+    applyToArgs(getParityAddition, [1, 2]),
 )
 
 export const getProductSign = conditionallyCall([

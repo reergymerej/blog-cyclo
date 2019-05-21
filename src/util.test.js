@@ -28,16 +28,16 @@ describe('conditionallyCall', () => {
   })
 })
 
-describe('ternaryDo', () => {
+describe('doTernary', () => {
   it('should call the first function', () => {
-    const result = mod.ternaryDo(
+    const result = mod.doTernary(
       yes, minus, plus
     )(1, 2)
     expect(result).toBe(-1)
   })
 
   it('should call the second function', () => {
-    const result = mod.ternaryDo(
+    const result = mod.doTernary(
       no, minus, plus
     )(1, 2)
     expect(result).toBe(3)
