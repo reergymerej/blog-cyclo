@@ -1,22 +1,28 @@
 const fromHash = (hash) => (key) => hash[key]
 
-const ifThen = (fn, result) => (a, b) => {
-  if (fn(a, b)) {
-    return result
-  }
-}
+const ifThenElse = (fn, truthy, falsy) => (...args) =>
+  fn(...args)
+    ? truthy(...args)
+    : falsy(...args)
 
-const bothX = (x) => (a, b) => (a === x && b === x)
-const eitherX = (x) => (a, b) => (a === x || b === x)
+const both = (x) => (a, b) => (a === x && b === x)
+const either = (x) => (a, b) => (a === x || b === x)
 
-const bothOdd = bothX('odd')
-const eitherOdd = eitherX('odd')
+const bothOdd = both('odd')
+const eitherOdd = either('odd')
 
-const bothNegative = bothX('negative')
-const eitherNegative = eitherX('negative')
+const bothNegative = both('negative')
+const eitherNegative = either('negative')
 
-const parityAdditionBothOdd = ifThen(bothOdd, 'even')
-const parityAdditionEitherOdd = ifThen(eitherOdd, 'odd')
+const get = (x) => () => x
+const even = get('even')
+const odd = get('odd')
+const positive = get('positive')
+const negative = get('negative')
+const undef = get()
+
+const parityAdditionBothOdd = ifThenElse(bothOdd, even, undef)
+const parityAdditionEitherOdd = ifThenElse(eitherOdd, odd, undef)
 
 // 3
 const doubleCheck = (cond1, fn1, cond2, fn2, defaultFn) => (a, b) => {
@@ -27,12 +33,6 @@ const doubleCheck = (cond1, fn1, cond2, fn2, defaultFn) => (a, b) => {
   }
   return defaultFn(a, b)
 }
-
-const get = (x) => () => x
-
-const positive = get('positive')
-const negative = get('negative')
-const even = get('even')
 
 export const getProductSign = doubleCheck(
   bothNegative, positive,
