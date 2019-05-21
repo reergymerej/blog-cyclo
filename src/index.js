@@ -16,26 +16,20 @@ const parityAdditionBothOdd = ifThen(bothOdd, 'even')
 const parityAdditionEitherOdd = ifThen(eitherOdd, 'odd')
 
 // 3
-const getParityAddition = (a, b) => {
-  const result = parityAdditionBothOdd(a, b)
-  const result2 = parityAdditionEitherOdd(a, b)
-
-  if (result) {
-    return result
-  } else if (result2) {
-    return result2
+const doubleCheck = (cond1, fn1, cond2, fn2, result) => (a, b) => {
+  if (cond1(a, b)) {
+    return fn1(a, b)
+  } else if (cond2(a, b)) {
+    return fn2(a, b)
   }
-  return 'even'
+  return result
 }
 
-// 3
-const doubleCheck = (check1, cb1, check2, cb2) => (a, b) => {
-  if (check1(a, b)) {
-    return cb1(a, b)
-  } else if (check2(a, b)) {
-    return cb2(a, b)
-  }
-}
+const getParityAddition = doubleCheck(
+  parityAdditionBothOdd, parityAdditionBothOdd,
+  parityAdditionEitherOdd, parityAdditionEitherOdd,
+  'even'
+)
 
 // 3
 const sendArg = (fn, value) => (a, b) => {
@@ -45,7 +39,6 @@ const sendArg = (fn, value) => (a, b) => {
     return fn(a)
   }
 }
-
 
 const twoWay = (cond1, result1, cond2, result2) => fromHash({
   [cond1]: result1,
