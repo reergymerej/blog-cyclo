@@ -1,4 +1,4 @@
-export const conditionallyExecuteFromList = (list, defaultFn) => (...args) => {
+export const conditionallyCall = (list, defaultFn) => (...args) => {
   const matched = list.find(([test]) => test(...args))
   return (matched)
     ? matched[1](...args)
@@ -6,7 +6,7 @@ export const conditionallyExecuteFromList = (list, defaultFn) => (...args) => {
 }
 
 export const ternaryDo = (testFn, truthyFn, falsyFn) => (...args) =>
-  conditionallyExecuteFromList([[ testFn, truthyFn ]], falsyFn)(...args)
+  conditionallyCall([[ testFn, truthyFn ]], falsyFn)(...args)
 
 export const ifThen = (testFn, truthyFn) => ternaryDo(testFn, truthyFn, undef)
 
@@ -25,7 +25,7 @@ export const applyToArgs = (fn, argIndices) => (...args) => {
   return fn(...argsToForward)
 }
 
-export const applyToOtherArg = (fn, value) => conditionallyExecuteFromList([
+export const applyToOtherArg = (fn, value) => conditionallyCall([
   [ applyToArgs(is(value), [0]),
     applyToArgs(fn, [1]),
   ],

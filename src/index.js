@@ -1,47 +1,63 @@
-import * as util from './util'
+import {
+  applyToArgs,
+  applyToOtherArg,
+  both,
+  conditionallyCall,
+  either,
+  equal,
+  first,
+  get,
+  has,
+  ifThen,
+  is,
+  prefix,
+  ternaryDo,
+  undef,
+} from './util'
 
-const even = util.get('even')
-const odd = util.get('odd')
-const positive = util.get('positive')
-const negative = util.get('negative')
+const even = get('even')
+const odd = get('odd')
+const positive = get('positive')
+const negative = get('negative')
 
-const parityAdditionBothOdd = util.ifThen(util.both('odd'), even)
-const parityAdditionEitherOdd = util.ifThen(util.either('odd'), odd)
+const isYellow = is('yellow')
+const hasRed = has('red')
+const hasBlue = has('blue')
 
-const getParityAddition = util.conditionallyExecuteFromList([
-  [parityAdditionBothOdd, parityAdditionBothOdd],
-  [parityAdditionEitherOdd, parityAdditionEitherOdd],
+const parityAdditionBothOdd = ifThen(both('odd'), even)
+const parityAdditionEitherOdd = ifThen(either('odd'), odd)
+const mixBlue = ifThen(isYellow, get('green'))
+
+const duplicate = fn => ([fn, fn])
+
+const getParityAddition = conditionallyCall([
+  duplicate(parityAdditionBothOdd),
+  duplicate(parityAdditionEitherOdd),
 ], even)
 
-const isYellow = util.is('yellow')
-const mixBlue = util.ifThen(isYellow, util.get('green'))
-
-const hasRed = util.has('red')
-const hasBlue = util.has('blue')
-
-const mixRed = util.conditionallyExecuteFromList([
-  [ util.applyToArgs(isYellow, [0]),
-    util.get('orange'),
+const mixRed = conditionallyCall([
+  [ applyToArgs(isYellow, [0]),
+    get('orange'),
   ],
-  [ util.applyToArgs(util.is('blue'), [0]),
-    util.get('purple'),
+  [ applyToArgs(is('blue'), [0]),
+    get('purple'),
   ],
-], util.undef)
+], undef)
 
-export const mixDirections = util.prefix
+export const mixDirections = prefix
 
-export const mixColors = util.conditionallyExecuteFromList([
-  [hasRed, util.applyToOtherArg(mixRed, 'red')],
-  [hasBlue, util.applyToOtherArg(mixBlue, 'blue')],
-], util.undef)
+export const mixColors = conditionallyCall([
+  [hasRed, applyToOtherArg(mixRed, 'red')],
+  [hasBlue, applyToOtherArg(mixBlue, 'blue')],
+], undef)
 
-export const getParity = util.ternaryDo(
-  util.applyToArgs(util.is('multiplication'), [0]),
-  util.applyToArgs(util.ternaryDo(util.equal, util.first, even), [1, 2]),
-  util.applyToArgs(getParityAddition, [1, 2]),
+export const getParity = ternaryDo(
+  applyToArgs(is('multiplication'), [0]),
+  applyToArgs(ternaryDo(equal, first, even), [1, 2]),
+  applyToArgs(getParityAddition, [1, 2]),
 )
 
-export const getProductSign = util.conditionallyExecuteFromList([
-  [util.both('negative'), positive],
-  [util.either('negative'), negative],
+export const getProductSign = conditionallyCall([
+  [both('negative'), positive],
+  [either('negative'), negative],
 ], positive)
