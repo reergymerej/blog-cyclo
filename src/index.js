@@ -5,26 +5,15 @@ const conditionallyExecuteFromList = (list, defaultFn) => (...args) => {
     : defaultFn(...args)
 }
 
-
 const ternaryDo = (testFn, truthyFn, falsyFn) => (...args) =>
   conditionallyExecuteFromList([[ testFn, truthyFn ]], falsyFn)(...args)
 
-const andDo = (testFn, truthyFn) => ternaryDo(testFn, truthyFn, undef)
+const ifThen = (testFn, truthyFn) => ternaryDo(testFn, truthyFn, undef)
 
 const both = (x) => (a, b) => (a === x && b === x)
 const either = (x) => (a, b) => (a === x || b === x)
 
-const bothOdd = both('odd')
-const eitherOdd = either('odd')
-
-const bothNegative = both('negative')
-const eitherNegative = either('negative')
-
 const get = (x) => () => x
-const even = get('even')
-const odd = get('odd')
-const positive = get('positive')
-const negative = get('negative')
 const undef = get()
 
 const nth = (n) => (...args) => args[n]
@@ -36,7 +25,7 @@ const applyToArgs = (fn, argIndices) => (...args) => {
   return fn(...argsToForward)
 }
 
-const sendArg = (fn, value) => conditionallyExecuteFromList([
+const applyToOtherArg = (fn, value) => conditionallyExecuteFromList([
   [ applyToArgs(is(value), [0]),
     applyToArgs(fn, [1]),
   ],
@@ -49,24 +38,29 @@ const prefix = (a, b) => `${a}${b}`
 const has = (value) => (a, b) => a === value || b === value
 const equal = (a, b) => a === b
 
-
 // -----------------------------------------------------------------------------
 
-const parityAdditionBothOdd = andDo(bothOdd, even)
-const parityAdditionEitherOdd = andDo(eitherOdd, odd)
+const even = get('even')
+const odd = get('odd')
+const positive = get('positive')
+const negative = get('negative')
+
+const parityAdditionBothOdd = ifThen(both('odd'), even)
+const parityAdditionEitherOdd = ifThen(either('odd'), odd)
 
 const getParityAddition = conditionallyExecuteFromList([
     [parityAdditionBothOdd, parityAdditionBothOdd],
     [parityAdditionEitherOdd, parityAdditionEitherOdd],
 ], even)
 
-const mixBlue = andDo(is('yellow'), get('green'))
+const isYellow = is('yellow')
+const mixBlue = ifThen(isYellow, get('green'))
 
 const hasRed = has('red')
 const hasBlue = has('blue')
 
 const mixRed = conditionallyExecuteFromList([
-  [ applyToArgs(is('yellow'), [0]),
+  [ applyToArgs(isYellow, [0]),
     get('orange'),
   ],
   [ applyToArgs(is('blue'), [0]),
@@ -74,25 +68,20 @@ const mixRed = conditionallyExecuteFromList([
   ],
 ], undef)
 
-const mixRedOnSomeSide = sendArg(mixRed, 'red')
-const mixBlueOnSomeSide = sendArg(mixBlue, 'blue')
-
-const getParityMultiplication = ternaryDo(equal, first, even)
-
 export const mixDirections = prefix
 
 export const mixColors = conditionallyExecuteFromList([
-  [hasRed, mixRedOnSomeSide],
-  [hasBlue, mixBlueOnSomeSide],
+  [hasRed, applyToOtherArg(mixRed, 'red')],
+  [hasBlue, applyToOtherArg(mixBlue, 'blue')],
 ], undef)
 
 export const getParity = ternaryDo(
-    applyToArgs(is('multiplication'), [0]),
-    applyToArgs(getParityMultiplication, [1, 2]),
-    applyToArgs(getParityAddition, [1, 2]),
-  )
+  applyToArgs(is('multiplication'), [0]),
+  applyToArgs(ternaryDo(equal, first, even), [1, 2]),
+  applyToArgs(getParityAddition, [1, 2]),
+)
 
 export const getProductSign = conditionallyExecuteFromList([
-    [bothNegative, positive],
-    [eitherNegative, negative],
+  [both('negative'), positive],
+  [either('negative'), negative],
 ], positive)
