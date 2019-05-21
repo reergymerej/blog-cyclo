@@ -1,15 +1,14 @@
 const fromHash = (hash) => (key) => hash[key]
 
-const conditionallyExecute = ([test, truthyFn]) => (...args) => {
-  if (test(...args)) {
-    return truthyFn(...args)
-  }
+const conditionallyExecuteFromList = (list, defaultFn) => (...args) => {
+  const matched = list.find(([test]) => test(...args))
+  return (matched)
+    ? matched[1](...args)
+    : defaultFn(...args)
 }
 
-const ternary = (fn, truthy, falsy) => (...args) => {
-  return conditionallyExecute([ fn, truthy ])(...args)
-    || falsy(...args)
-}
+const ternary = (fn, truthy, falsy) => (...args) =>
+  conditionallyExecuteFromList([[ fn, truthy ]], falsy)(...args)
 
 const both = (x) => (a, b) => (a === x && b === x)
 const either = (x) => (a, b) => (a === x || b === x)
