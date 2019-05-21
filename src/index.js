@@ -29,23 +29,15 @@ const undef = get()
 const parityAdditionBothOdd = ternary(bothOdd, even, undef)
 const parityAdditionEitherOdd = ternary(eitherOdd, odd, undef)
 
-const doubleCheck = (cond1, fn1, cond2, fn2, defaultFn) =>
-  conditionallyExecuteFromList([
-    [cond1, fn1],
-    [cond2, fn2],
-  ], defaultFn)
+export const getProductSign = conditionallyExecuteFromList([
+    [bothNegative, positive],
+    [eitherNegative, negative],
+], positive)
 
-export const getProductSign = doubleCheck(
-  bothNegative, positive,
-  eitherNegative, negative,
-  positive
-)
-
-const getParityAddition = doubleCheck(
-  parityAdditionBothOdd, parityAdditionBothOdd,
-  parityAdditionEitherOdd, parityAdditionEitherOdd,
-  even
-)
+const getParityAddition = conditionallyExecuteFromList([
+    [parityAdditionBothOdd, parityAdditionBothOdd],
+    [parityAdditionEitherOdd, parityAdditionEitherOdd],
+], even)
 
 // 3
 const sendArg = (fn, value) => (a, b) => {
@@ -62,9 +54,8 @@ const twoWay = (cond1, result1, cond2, result2) => fromHash({
 })
 
 const prefix = (a, b) => `${a}${b}`
-const prefixer = (a) => (b) => prefix(a, b)
 
-export const mixDirections = (a, b) => prefixer(a)(b)
+export const mixDirections = prefix
 
 const first = (a) => a
 const is = (something) => (a) => a === something
@@ -83,7 +74,10 @@ const mixRed = twoWay('yellow', 'orange', 'blue', 'purple')
 const mixRedOnSomeSide = sendArg(mixRed, 'red')
 const mixBlueOnSomeSide = sendArg(mixBlue, 'blue')
 
-export const mixColors = doubleCheck(hasRed, mixRedOnSomeSide, hasBlue, mixBlueOnSomeSide)
+export const mixColors = conditionallyExecuteFromList([
+  [hasRed, mixRedOnSomeSide],
+  [hasBlue, mixBlueOnSomeSide],
+], undef)
 
 const equal = (a, b) => a === b
 
