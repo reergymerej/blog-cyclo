@@ -46,11 +46,17 @@ export const mixDirections = (a, b) => {
   }
 }
 
-// 4
+const bothX = (x) => (a, b) => (a === x && b === x)
+const eitherX = (x) => (a, b) => (a === x || b === x)
+
+const bothNegative = bothX('negative')
+const eitherNegative = eitherX('negative')
+
+// 3
 export const getProductSign = (a, b) => {
-  if (a === 'negative' && b === 'negative') {
+  if (bothNegative(a, b)) {
     return 'positive'
-  } else if (a === 'negative' || b === 'negative') {
+  } else if (eitherNegative(a, b)) {
     return 'negative'
   }
   return 'positive'
@@ -61,8 +67,6 @@ const getParityMultiplication = (a, b) => (a === b)
   : 'even'
 
 
-const bothX = (x) => (a, b) => (a === x && b === x)
-const eitherX = (x) => (a, b) => (a === x || b === x)
 
 const bothOdd = bothX('odd')
 const eitherOdd = eitherX('odd')
