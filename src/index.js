@@ -39,14 +39,22 @@ const getParityAddition = conditionallyExecuteFromList([
     [parityAdditionEitherOdd, parityAdditionEitherOdd],
 ], even)
 
-// 3
-const sendArg = (fn, value) => (a, b) => {
-  if (a === value) {
-    return fn(b)
-  } else if (b === value) {
-    return fn(a)
-  }
-}
+const nth = (n) => (...args) => args[n]
+const first = nth(0)
+
+const applyNthArgTo = (n, fn) => (...args) => fn(nth(n)(...args))
+
+const is = (something) => (a) => a === something
+
+const sendArg = (fn, value) => (a, b) => conditionallyExecuteFromList([
+  [ applyNthArgTo(0, is(value)),
+    applyNthArgTo(1, fn),
+  ],
+
+  [ applyNthArgTo(1, is(value)),
+    applyNthArgTo(0, fn)
+  ],
+], undef)(a, b)
 
 const twoWay = (cond1, result1, cond2, result2) => fromHash({
   [cond1]: result1,
@@ -56,9 +64,6 @@ const twoWay = (cond1, result1, cond2, result2) => fromHash({
 const prefix = (a, b) => `${a}${b}`
 
 export const mixDirections = prefix
-
-const first = (a) => a
-const is = (something) => (a) => a === something
 
 const mixBlue = ternary(
   is('yellow'),
