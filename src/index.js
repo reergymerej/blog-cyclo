@@ -1,87 +1,47 @@
-const conditionallyExecuteFromList = (list, defaultFn) => (...args) => {
-  const matched = list.find(([test]) => test(...args))
-  return (matched)
-    ? matched[1](...args)
-    : defaultFn(...args)
-}
+import * as util from './util'
 
-const ternaryDo = (testFn, truthyFn, falsyFn) => (...args) =>
-  conditionallyExecuteFromList([[ testFn, truthyFn ]], falsyFn)(...args)
+const even = util.get('even')
+const odd = util.get('odd')
+const positive = util.get('positive')
+const negative = util.get('negative')
 
-const ifThen = (testFn, truthyFn) => ternaryDo(testFn, truthyFn, undef)
+const parityAdditionBothOdd = util.ifThen(util.both('odd'), even)
+const parityAdditionEitherOdd = util.ifThen(util.either('odd'), odd)
 
-const both = (x) => (a, b) => (a === x && b === x)
-const either = (x) => (a, b) => (a === x || b === x)
-
-const get = (x) => () => x
-const undef = get()
-
-const nth = (n) => (...args) => args[n]
-const first = nth(0)
-const is = (something) => (a) => a === something
-
-const applyToArgs = (fn, argIndices) => (...args) => {
-  const argsToForward = argIndices.map(i => args[i])
-  return fn(...argsToForward)
-}
-
-const applyToOtherArg = (fn, value) => conditionallyExecuteFromList([
-  [ applyToArgs(is(value), [0]),
-    applyToArgs(fn, [1]),
-  ],
-  [ applyToArgs(is(value), [1]),
-    applyToArgs(fn, [0]),
-  ],
-], undef)
-
-const prefix = (a, b) => `${a}${b}`
-const has = (value) => (a, b) => a === value || b === value
-const equal = (a, b) => a === b
-
-// -----------------------------------------------------------------------------
-
-const even = get('even')
-const odd = get('odd')
-const positive = get('positive')
-const negative = get('negative')
-
-const parityAdditionBothOdd = ifThen(both('odd'), even)
-const parityAdditionEitherOdd = ifThen(either('odd'), odd)
-
-const getParityAddition = conditionallyExecuteFromList([
-    [parityAdditionBothOdd, parityAdditionBothOdd],
-    [parityAdditionEitherOdd, parityAdditionEitherOdd],
+const getParityAddition = util.conditionallyExecuteFromList([
+  [parityAdditionBothOdd, parityAdditionBothOdd],
+  [parityAdditionEitherOdd, parityAdditionEitherOdd],
 ], even)
 
-const isYellow = is('yellow')
-const mixBlue = ifThen(isYellow, get('green'))
+const isYellow = util.is('yellow')
+const mixBlue = util.ifThen(isYellow, util.get('green'))
 
-const hasRed = has('red')
-const hasBlue = has('blue')
+const hasRed = util.has('red')
+const hasBlue = util.has('blue')
 
-const mixRed = conditionallyExecuteFromList([
-  [ applyToArgs(isYellow, [0]),
-    get('orange'),
+const mixRed = util.conditionallyExecuteFromList([
+  [ util.applyToArgs(isYellow, [0]),
+    util.get('orange'),
   ],
-  [ applyToArgs(is('blue'), [0]),
-    get('purple'),
+  [ util.applyToArgs(util.is('blue'), [0]),
+    util.get('purple'),
   ],
-], undef)
+], util.undef)
 
-export const mixDirections = prefix
+export const mixDirections = util.prefix
 
-export const mixColors = conditionallyExecuteFromList([
-  [hasRed, applyToOtherArg(mixRed, 'red')],
-  [hasBlue, applyToOtherArg(mixBlue, 'blue')],
-], undef)
+export const mixColors = util.conditionallyExecuteFromList([
+  [hasRed, util.applyToOtherArg(mixRed, 'red')],
+  [hasBlue, util.applyToOtherArg(mixBlue, 'blue')],
+], util.undef)
 
-export const getParity = ternaryDo(
-  applyToArgs(is('multiplication'), [0]),
-  applyToArgs(ternaryDo(equal, first, even), [1, 2]),
-  applyToArgs(getParityAddition, [1, 2]),
+export const getParity = util.ternaryDo(
+  util.applyToArgs(util.is('multiplication'), [0]),
+  util.applyToArgs(util.ternaryDo(util.equal, util.first, even), [1, 2]),
+  util.applyToArgs(getParityAddition, [1, 2]),
 )
 
-export const getProductSign = conditionallyExecuteFromList([
-  [both('negative'), positive],
-  [either('negative'), negative],
+export const getProductSign = util.conditionallyExecuteFromList([
+  [util.both('negative'), positive],
+  [util.either('negative'), negative],
 ], positive)
