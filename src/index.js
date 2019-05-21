@@ -45,19 +45,25 @@ export const getProductSign = (a, b) => {
   return 'positive'
 }
 
-// 6
-export const getParity = (operation, a, b) => {
-  if (operation === 'multiplication') {
-    if (a === b) {
-      return a
-    }
-    return 'even'
+const getParityMultiplication = (a, b) => {
+  if (a === b) {
+    return a
   }
+  return 'even'
+}
 
+// 4
+const getParityAddition = (a, b) => {
   if (a === 'odd' && b === 'odd') {
     return 'even'
   } else if (a === 'odd' || b === 'odd') {
     return 'odd'
   }
   return 'even'
+}
+
+export const getParity = (operation, a, b) => {
+  return (operation === 'multiplication')
+    ? getParityMultiplication(a, b)
+    : getParityAddition(a, b)
 }
