@@ -1,9 +1,29 @@
+const fromHash = (hash) => (key) => hash[key]
+
+const ifThen = (fn, result) => (a, b) => {
+  if (fn(a, b)) {
+    return result
+  }
+}
+
+const bothX = (x) => (a, b) => (a === x && b === x)
+const eitherX = (x) => (a, b) => (a === x || b === x)
+
+const bothOdd = bothX('odd')
+const eitherOdd = eitherX('odd')
+
+const parityAdditionBothOdd = ifThen(bothOdd, 'even')
+const parityAdditionEitherOdd = ifThen(eitherOdd, 'odd')
+
 // 3
 const getParityAddition = (a, b) => {
-  if (bothOdd(a, b)) {
-    return 'even'
-  } else if (eitherOdd(a, b)) {
-    return 'odd'
+  const result = parityAdditionBothOdd(a, b)
+  const result2 = parityAdditionEitherOdd(a, b)
+
+  if (result) {
+    return result
+  } else if (result2) {
+    return result2
   }
   return 'even'
 }
@@ -26,7 +46,6 @@ const sendArg = (fn, value) => (a, b) => {
   }
 }
 
-const fromHash = (hash) => (key) => hash[key]
 
 const twoWay = (cond1, result1, cond2, result2) => fromHash({
   [cond1]: result1,
@@ -58,8 +77,6 @@ const mixBlueOnSomeSide = sendArg(mixBlue, 'blue')
 
 export const mixColors = doubleCheck(hasRed, mixRedOnSomeSide, hasBlue, mixBlueOnSomeSide)
 
-const bothX = (x) => (a, b) => (a === x && b === x)
-const eitherX = (x) => (a, b) => (a === x || b === x)
 
 const bothNegative = bothX('negative')
 const eitherNegative = eitherX('negative')
@@ -79,8 +96,6 @@ const getParityMultiplication = (a, b) => (a === b)
   ? a
   : 'even'
 
-const bothOdd = bothX('odd')
-const eitherOdd = eitherX('odd')
 
 export const getParity = (operation, a, b) => (operation === 'multiplication')
   ? getParityMultiplication(a, b)
