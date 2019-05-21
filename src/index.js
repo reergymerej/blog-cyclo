@@ -19,25 +19,31 @@ const parityAdditionBothOdd = ifThen(bothOdd, 'even')
 const parityAdditionEitherOdd = ifThen(eitherOdd, 'odd')
 
 // 3
-const doubleCheck = (cond1, fn1, cond2, fn2, result) => (a, b) => {
+const doubleCheck = (cond1, fn1, cond2, fn2, defaultFn) => (a, b) => {
   if (cond1(a, b)) {
     return fn1(a, b)
   } else if (cond2(a, b)) {
     return fn2(a, b)
   }
-  return result
+  return defaultFn(a, b)
 }
 
+const get = (x) => () => x
+
+const positive = get('positive')
+const negative = get('negative')
+const even = get('even')
+
 export const getProductSign = doubleCheck(
-  bothNegative, () => 'positive',
-  eitherNegative, () => 'negative',
-  'positive'
+  bothNegative, positive,
+  eitherNegative, negative,
+  positive
 )
 
 const getParityAddition = doubleCheck(
   parityAdditionBothOdd, parityAdditionBothOdd,
   parityAdditionEitherOdd, parityAdditionEitherOdd,
-  'even'
+  even
 )
 
 // 3
@@ -54,20 +60,15 @@ const twoWay = (cond1, result1, cond2, result2) => fromHash({
   [cond2]: result2,
 })
 
-// 3
-export const mixDirections = (a, b) => {
-  if (a === 'N') {
-    return `N${b}`
-  } else if (a === 'S') {
-    return `S${b}`
-  }
-}
+const prefix = (a, b) => `${a}${b}`
+const prefixer = (a) => (b) => prefix(a, b)
 
-const mixBlue = (a) => {
-  if (a === 'yellow') {
-    return 'green'
-  }
-}
+export const mixDirections = (a, b) => prefixer(a)(b)
+
+const mixBlue = (a) =>
+  (a === 'yellow')
+    ? 'green'
+    : undefined
 
 const has = (value) => (a, b) => a === value || b === value
 const hasRed = has('red')
@@ -79,10 +80,12 @@ const mixBlueOnSomeSide = sendArg(mixBlue, 'blue')
 
 export const mixColors = doubleCheck(hasRed, mixRedOnSomeSide, hasBlue, mixBlueOnSomeSide)
 
-const getParityMultiplication = (a, b) => (a === b)
-  ? a
-  : 'even'
+const getParityMultiplication = (a, b) =>
+  (a === b)
+    ? a
+    : 'even'
 
-export const getParity = (operation, a, b) => (operation === 'multiplication')
-  ? getParityMultiplication(a, b)
-  : getParityAddition(a, b)
+export const getParity = (operation, a, b) =>
+  (operation === 'multiplication')
+    ? getParityMultiplication(a, b)
+    : getParityAddition(a, b)
