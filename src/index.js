@@ -34,3 +34,13 @@ export const mixDirections = (a, b) => {
     return `S${b}`
   }
 }
+
+// 4
+export const getProductSign = (a, b) => {
+  if (a === 'negative' && b === 'negative') {
+    return 'positive'
+  } else if (a === 'negative' || b === 'negative') {
+    return 'negative'
+  }
+  return 'positive'
+}

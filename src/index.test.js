@@ -27,3 +27,16 @@ describe('mixDirections', () => {
     expect(mod.mixDirections(a, b)).toBe(expected)
   })
 })
+
+describe('getProductSign', () => {
+  const input = [
+    ['positive', 'positive', 'positive'],
+    ['positive', 'negative', 'negative'],
+    ['negative', 'positive', 'negative'],
+    ['negative', 'negative', 'positive'],
+  ]
+
+  test.each(input)('getProductSign(%s, %s)', (a, b, expected) => {
+    expect(mod.getProductSign(a, b)).toBe(expected)
+  })
+})
