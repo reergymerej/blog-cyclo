@@ -29,21 +29,26 @@ const undef = get()
 
 const nth = (n) => (...args) => args[n]
 const first = nth(0)
-const applyNthArgTo = (n, fn) => (...args) => fn(nth(n)(...args))
 const is = (something) => (a) => a === something
 
+const applyToArgs = (fn, argIndices) => (...args) => {
+  const argsToForward = argIndices.map(i => args[i])
+  return fn(...argsToForward)
+}
+
 const sendArg = (fn, value) => conditionallyExecuteFromList([
-  [ applyNthArgTo(0, is(value)),
-    applyNthArgTo(1, fn),
+  [ applyToArgs(is(value), [0]),
+    applyToArgs(fn, [1]),
   ],
-  [ applyNthArgTo(1, is(value)),
-    applyNthArgTo(0, fn),
+  [ applyToArgs(is(value), [1]),
+    applyToArgs(fn, [0]),
   ],
 ], undef)
 
 const prefix = (a, b) => `${a}${b}`
 const has = (value) => (a, b) => a === value || b === value
 const equal = (a, b) => a === b
+
 
 // -----------------------------------------------------------------------------
 
@@ -61,10 +66,10 @@ const hasRed = has('red')
 const hasBlue = has('blue')
 
 const mixRed = conditionallyExecuteFromList([
-  [ applyNthArgTo(0, is('yellow')),
+  [ applyToArgs(is('yellow'), [0]),
     get('orange'),
   ],
-  [ applyNthArgTo(0, is('blue')),
+  [ applyToArgs(is('blue'), [0]),
     get('purple'),
   ],
 ], undef)
@@ -82,9 +87,9 @@ export const mixColors = conditionallyExecuteFromList([
 ], undef)
 
 export const getParity = ternaryDo(
-    applyNthArgTo(0, is('multiplication')),
-    (...args) => getParityMultiplication(args[1], args[2]),
-    (...args) => getParityAddition(args[1], args[2])
+    applyToArgs(is('multiplication'), [0]),
+    applyToArgs(getParityMultiplication, [1, 2]),
+    applyToArgs(getParityAddition, [1, 2]),
   )
 
 export const getProductSign = conditionallyExecuteFromList([
