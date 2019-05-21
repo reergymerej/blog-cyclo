@@ -81,10 +81,11 @@ export const mixColors = conditionallyExecuteFromList([
   [hasBlue, mixBlueOnSomeSide],
 ], undef)
 
-export const getParity = (operation, a, b) =>
-  (operation === 'multiplication')
-    ? getParityMultiplication(a, b)
-    : getParityAddition(a, b)
+export const getParity = ternaryDo(
+    applyNthArgTo(0, is('multiplication')),
+    (...args) => getParityMultiplication(args[1], args[2]),
+    (...args) => getParityAddition(args[1], args[2])
+  )
 
 export const getProductSign = conditionallyExecuteFromList([
     [bothNegative, positive],
