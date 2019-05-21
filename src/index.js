@@ -1,5 +1,3 @@
-const fromHash = (hash) => (key) => hash[key]
-
 const conditionallyExecuteFromList = (list, defaultFn) => (...args) => {
   const matched = list.find(([test]) => test(...args))
   return (matched)
@@ -7,8 +5,11 @@ const conditionallyExecuteFromList = (list, defaultFn) => (...args) => {
     : defaultFn(...args)
 }
 
-const ternary = (testFn, truthyFn, falsyFn) => (...args) =>
+
+const ternaryDo = (testFn, truthyFn, falsyFn) => (...args) =>
   conditionallyExecuteFromList([[ testFn, truthyFn ]], falsyFn)(...args)
+
+const andDo = (testFn, truthyFn) => ternaryDo(testFn, truthyFn, undef)
 
 const both = (x) => (a, b) => (a === x && b === x)
 const either = (x) => (a, b) => (a === x || b === x)
@@ -26,24 +27,9 @@ const positive = get('positive')
 const negative = get('negative')
 const undef = get()
 
-const parityAdditionBothOdd = ternary(bothOdd, even, undef)
-const parityAdditionEitherOdd = ternary(eitherOdd, odd, undef)
-
-export const getProductSign = conditionallyExecuteFromList([
-    [bothNegative, positive],
-    [eitherNegative, negative],
-], positive)
-
-const getParityAddition = conditionallyExecuteFromList([
-    [parityAdditionBothOdd, parityAdditionBothOdd],
-    [parityAdditionEitherOdd, parityAdditionEitherOdd],
-], even)
-
 const nth = (n) => (...args) => args[n]
 const first = nth(0)
-
 const applyNthArgTo = (n, fn) => (...args) => fn(nth(n)(...args))
-
 const is = (something) => (a) => a === something
 
 const sendArg = (fn, value) => conditionallyExecuteFromList([
@@ -56,16 +42,21 @@ const sendArg = (fn, value) => conditionallyExecuteFromList([
 ], undef)
 
 const prefix = (a, b) => `${a}${b}`
-
-export const mixDirections = prefix
-
-const mixBlue = ternary(
-  is('yellow'),
-  get('green'),
-  undef
-)
-
 const has = (value) => (a, b) => a === value || b === value
+const equal = (a, b) => a === b
+
+// -----------------------------------------------------------------------------
+
+const parityAdditionBothOdd = andDo(bothOdd, even)
+const parityAdditionEitherOdd = andDo(eitherOdd, odd)
+
+const getParityAddition = conditionallyExecuteFromList([
+    [parityAdditionBothOdd, parityAdditionBothOdd],
+    [parityAdditionEitherOdd, parityAdditionEitherOdd],
+], even)
+
+const mixBlue = andDo(is('yellow'), get('green'))
+
 const hasRed = has('red')
 const hasBlue = has('blue')
 
@@ -81,16 +72,21 @@ const mixRed = conditionallyExecuteFromList([
 const mixRedOnSomeSide = sendArg(mixRed, 'red')
 const mixBlueOnSomeSide = sendArg(mixBlue, 'blue')
 
+const getParityMultiplication = ternaryDo(equal, first, even)
+
+export const mixDirections = prefix
+
 export const mixColors = conditionallyExecuteFromList([
   [hasRed, mixRedOnSomeSide],
   [hasBlue, mixBlueOnSomeSide],
 ], undef)
 
-const equal = (a, b) => a === b
-
-const getParityMultiplication = ternary(equal, first, even)
-
 export const getParity = (operation, a, b) =>
   (operation === 'multiplication')
     ? getParityMultiplication(a, b)
     : getParityAddition(a, b)
+
+export const getProductSign = conditionallyExecuteFromList([
+    [bothNegative, positive],
+    [eitherNegative, negative],
+], positive)
