@@ -51,16 +51,7 @@ const sendArg = (fn, value) => conditionallyExecuteFromList([
     applyNthArgTo(1, fn),
   ],
   [ applyNthArgTo(1, is(value)),
-    applyNthArgTo(0, fn)
-  ],
-], undef)
-
-const twoWay = (cond1, result1, cond2, result2) => conditionallyExecuteFromList([
-  [ applyNthArgTo(0, is(cond1)),
-    get(result1)
-  ],
-  [ applyNthArgTo(0, is(cond2)),
-    get(result2)
+    applyNthArgTo(0, fn),
   ],
 ], undef)
 
@@ -78,7 +69,15 @@ const has = (value) => (a, b) => a === value || b === value
 const hasRed = has('red')
 const hasBlue = has('blue')
 
-const mixRed = twoWay('yellow', 'orange', 'blue', 'purple')
+const mixRed = conditionallyExecuteFromList([
+  [ applyNthArgTo(0, is('yellow')),
+    get('orange'),
+  ],
+  [ applyNthArgTo(0, is('blue')),
+    get('purple'),
+  ],
+], undef)
+
 const mixRedOnSomeSide = sendArg(mixRed, 'red')
 const mixBlueOnSomeSide = sendArg(mixBlue, 'blue')
 
