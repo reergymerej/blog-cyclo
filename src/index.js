@@ -60,11 +60,19 @@ const getParityMultiplication = (a, b) => (a === b)
   ? a
   : 'even'
 
-// 4
+
+const bothX = (x) => (a, b) => (a === x && b === x)
+const eitherX = (x) => (a, b) => (a === x || b === x)
+
+const bothOdd = bothX('odd')
+const eitherOdd = eitherX('odd')
+
+
+// 3
 const getParityAddition = (a, b) => {
-  if (a === 'odd' && b === 'odd') {
+  if (bothOdd(a, b)) {
     return 'even'
-  } else if (a === 'odd' || b === 'odd') {
+  } else if (eitherOdd(a, b)) {
     return 'odd'
   }
   return 'even'
