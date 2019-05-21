@@ -29,15 +29,11 @@ const undef = get()
 const parityAdditionBothOdd = ternary(bothOdd, even, undef)
 const parityAdditionEitherOdd = ternary(eitherOdd, odd, undef)
 
-// 3
-const doubleCheck = (cond1, fn1, cond2, fn2, defaultFn) => (a, b) => {
-  if (cond1(a, b)) {
-    return fn1(a, b)
-  } else if (cond2(a, b)) {
-    return fn2(a, b)
-  }
-  return defaultFn(a, b)
-}
+const doubleCheck = (cond1, fn1, cond2, fn2, defaultFn) =>
+  conditionallyExecuteFromList([
+    [cond1, fn1],
+    [cond2, fn2],
+  ], defaultFn)
 
 export const getProductSign = doubleCheck(
   bothNegative, positive,
