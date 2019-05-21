@@ -13,27 +13,20 @@ const mixBlue = (a) => {
   }
 }
 
-const hasRed = (a, b) => a === 'red' || b === 'red'
+const has = (value) => (a, b) => a === value || b === value
+const hasRed = has('red')
+const hasBlue = has('blue')
 
-const hasBlue = (a, b) => a === 'blue' || b === 'blue'
-
-// 3
-const mixRedOnSomeSide = (a, b) => {
-  if (a === 'red') {
-    return mixRed(b)
-  } else if (b === 'red') {
-    return mixRed(a)
+const sendArg = (fn, value) => (a, b) => {
+  if (a === value) {
+    return fn(b)
+  } else if (b === value) {
+    return fn(a)
   }
 }
 
-// 3
-const mixBlueOnSomeSide = (a, b) => {
-  if (a === 'blue') {
-    return mixBlue(b)
-  } else if (b === 'blue') {
-    return mixBlue(a)
-  }
-}
+const mixRedOnSomeSide = sendArg(mixRed, 'red')
+const mixBlueOnSomeSide = sendArg(mixBlue, 'blue')
 
 // 3
 export const mixColors = (a, b) => {
