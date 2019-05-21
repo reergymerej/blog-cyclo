@@ -37,7 +37,7 @@ module.exports = {
       "warn",
     ],
     "complexity": [
-      "warn", 3
+      "warn", 2
     ],
   }
 }
