@@ -46,20 +46,23 @@ const applyNthArgTo = (n, fn) => (...args) => fn(nth(n)(...args))
 
 const is = (something) => (a) => a === something
 
-const sendArg = (fn, value) => (a, b) => conditionallyExecuteFromList([
+const sendArg = (fn, value) => conditionallyExecuteFromList([
   [ applyNthArgTo(0, is(value)),
     applyNthArgTo(1, fn),
   ],
-
   [ applyNthArgTo(1, is(value)),
     applyNthArgTo(0, fn)
   ],
-], undef)(a, b)
+], undef)
 
-const twoWay = (cond1, result1, cond2, result2) => fromHash({
-  [cond1]: result1,
-  [cond2]: result2,
-})
+const twoWay = (cond1, result1, cond2, result2) => conditionallyExecuteFromList([
+  [ applyNthArgTo(0, is(cond1)),
+    get(result1)
+  ],
+  [ applyNthArgTo(0, is(cond2)),
+    get(result2)
+  ],
+], undef)
 
 const prefix = (a, b) => `${a}${b}`
 
