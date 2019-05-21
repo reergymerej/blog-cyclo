@@ -40,3 +40,16 @@ describe('getProductSign', () => {
     expect(mod.getProductSign(a, b)).toBe(expected)
   })
 })
+
+describe('getParity', () => {
+  const input = [
+    ['even', 'even', 'even'],
+    ['even', 'odd', 'odd'],
+    ['odd', 'even', 'odd'],
+    ['odd', 'odd', 'even'],
+  ]
+
+  test.each(input)('getParity(%s, %s)', (a, b, expected) => {
+    expect(mod.getParity(a, b)).toBe(expected)
+  })
+})

@@ -44,3 +44,13 @@ export const getProductSign = (a, b) => {
   }
   return 'positive'
 }
+
+// 4
+export const getParity = (a, b) => {
+  if (a === 'odd' && b === 'odd') {
+    return 'even'
+  } else if (a === 'odd' || b === 'odd') {
+    return 'odd'
+  }
+  return 'even'
+}
