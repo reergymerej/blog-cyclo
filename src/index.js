@@ -12,6 +12,9 @@ const eitherX = (x) => (a, b) => (a === x || b === x)
 const bothOdd = bothX('odd')
 const eitherOdd = eitherX('odd')
 
+const bothNegative = bothX('negative')
+const eitherNegative = eitherX('negative')
+
 const parityAdditionBothOdd = ifThen(bothOdd, 'even')
 const parityAdditionEitherOdd = ifThen(eitherOdd, 'odd')
 
@@ -24,6 +27,12 @@ const doubleCheck = (cond1, fn1, cond2, fn2, result) => (a, b) => {
   }
   return result
 }
+
+export const getProductSign = doubleCheck(
+  bothNegative, () => 'positive',
+  eitherNegative, () => 'negative',
+  'positive'
+)
 
 const getParityAddition = doubleCheck(
   parityAdditionBothOdd, parityAdditionBothOdd,
@@ -70,25 +79,9 @@ const mixBlueOnSomeSide = sendArg(mixBlue, 'blue')
 
 export const mixColors = doubleCheck(hasRed, mixRedOnSomeSide, hasBlue, mixBlueOnSomeSide)
 
-
-const bothNegative = bothX('negative')
-const eitherNegative = eitherX('negative')
-
-// 3
-export const getProductSign = (a, b) => {
-  if (bothNegative(a, b)) {
-    return 'positive'
-  } else if (eitherNegative(a, b)) {
-    return 'negative'
-  }
-  return 'positive'
-}
-
-
 const getParityMultiplication = (a, b) => (a === b)
   ? a
   : 'even'
-
 
 export const getParity = (operation, a, b) => (operation === 'multiplication')
   ? getParityMultiplication(a, b)
