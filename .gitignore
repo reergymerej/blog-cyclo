@@ -1,0 +1,6 @@
+node_modules/
+lib/
+coverage/
+.scannerwork/
+eslint-report.json
+coverage/
