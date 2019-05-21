@@ -14,3 +14,16 @@ describe('mixColors', () => {
     expect(mod.mixColors(a, b)).toBe(expected)
   })
 })
+
+describe('mixDirections', () => {
+  const input = [
+    ['N', 'W', 'NW'],
+    ['N', 'E', 'NE'],
+    ['S', 'W', 'SW'],
+    ['S', 'E', 'SE'],
+  ]
+
+  test.each(input)('mixDirections(%s, %s)', (a, b, expected) => {
+    expect(mod.mixDirections(a, b)).toBe(expected)
+  })
+})

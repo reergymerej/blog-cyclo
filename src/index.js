@@ -25,3 +25,12 @@ export const mixColors = (a, b) => {
     return mixBlue(a)
   }
 }
+
+// 3
+export const mixDirections = (a, b) => {
+  if (a === 'N') {
+    return `N${b}`
+  } else if (a === 'S') {
+    return `S${b}`
+  }
+}
