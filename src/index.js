@@ -7,8 +7,8 @@ const conditionallyExecuteFromList = (list, defaultFn) => (...args) => {
     : defaultFn(...args)
 }
 
-const ternary = (fn, truthy, falsy) => (...args) =>
-  conditionallyExecuteFromList([[ fn, truthy ]], falsy)(...args)
+const ternary = (testFn, truthyFn, falsyFn) => (...args) =>
+  conditionallyExecuteFromList([[ testFn, truthyFn ]], falsyFn)(...args)
 
 const both = (x) => (a, b) => (a === x && b === x)
 const either = (x) => (a, b) => (a === x || b === x)
@@ -66,10 +66,14 @@ const prefixer = (a) => (b) => prefix(a, b)
 
 export const mixDirections = (a, b) => prefixer(a)(b)
 
-const mixBlue = (a) =>
-  (a === 'yellow')
-    ? 'green'
-    : undefined
+const first = (a) => a
+const is = (something) => (a) => a === something
+
+const mixBlue = ternary(
+  is('yellow'),
+  get('green'),
+  undef
+)
 
 const has = (value) => (a, b) => a === value || b === value
 const hasRed = has('red')
@@ -81,10 +85,9 @@ const mixBlueOnSomeSide = sendArg(mixBlue, 'blue')
 
 export const mixColors = doubleCheck(hasRed, mixRedOnSomeSide, hasBlue, mixBlueOnSomeSide)
 
-const getParityMultiplication = (a, b) =>
-  (a === b)
-    ? a
-    : 'even'
+const equal = (a, b) => a === b
+
+const getParityMultiplication = ternary(equal, first, even)
 
 export const getParity = (operation, a, b) =>
   (operation === 'multiplication')
