@@ -3,6 +3,7 @@ import {
   applyToOtherArg,
   both,
   conditionallyCall,
+  createWhitelistChecker,
   doTernary,
   either,
   equal,
@@ -24,7 +25,6 @@ const negative = get('negative')
 const isYellow = is('yellow')
 const hasRed = has('red')
 const hasBlue = has('blue')
-const hasYellow = has('yellow')
 
 const parityAdditionBothOdd = ifThen(both('odd'), even)
 const parityAdditionEitherOdd = ifThen(either('odd'), odd)
@@ -54,22 +54,9 @@ const mixRed = conditionallyCall([
   ],
 ], handleUnknownOption)
 
-const notIn = (list, value) => {
-  if (!list.includes(value)) {
-    return value
-  }
-}
-
-const findNotIn = (list) => (...args) => args.find(x => notIn(list, x))
-
-const createWhitelistChecker = (list, onInvalidOption) => (a, b) => {
-  const badValue = findNotIn(list)(a, b)
-  return badValue
-    ? onInvalidOption(badValue)
-    : prefix(a, b)
-}
-
-const directionWhitelist = createWhitelistChecker(['N', 'E', 'W', 'S'], handleUnknownOption)
+const createListGate = (list) => createWhitelistChecker(list, handleUnknownOption, undef)
+const directionWhitelist = createListGate(['N', 'E', 'W', 'S'])
+const colorWhitelist = createListGate(['red', 'yellow', 'blue'])
 
 export const mixDirections = (a, b) => {
   directionWhitelist(a, b)
@@ -77,9 +64,9 @@ export const mixDirections = (a, b) => {
 }
 
 export const mixColors = conditionallyCall([
+  [colorWhitelist, () => 999],
   [hasRed, applyToOtherArg(mixRed, 'red')],
   [hasBlue, applyToOtherArg(mixBlue, 'blue')],
-  [hasYellow, applyToOtherArg(handleUnknownOption, 'yellow')],
 ], undef)
 
 export const getParity = doTernary(

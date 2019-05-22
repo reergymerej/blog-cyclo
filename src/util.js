@@ -34,8 +34,23 @@ export const applyToOtherArg = (fn, value) => conditionallyCall([
   ],
 ], undef)
 
+const notIn = (list, value) => {
+  if (!list.includes(value)) {
+    return value
+  }
+}
+
+const findNotIn = (list) => (...args) => args.find(x => notIn(list, x))
+
 export const prefix = (a, b) => `${a}${b}`
 export const has = (value) => (a, b) => a === value || b === value
 export const equal = (a, b) => a === b
 
 export const testArg = (n, isFn) => applyToArgs(isFn, [n])
+
+export const createWhitelistChecker = (list, onInvalidOption, onAllValid) => (...args) => {
+  const badValue = findNotIn(list)(...args)
+  return badValue
+    ? onInvalidOption(badValue)
+    : onAllValid(...args)
+}
