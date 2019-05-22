@@ -105,7 +105,7 @@ describe('getParity', () => {
     ['hot fire', 'even', 'odd', 'hot fire'],
     ['hot fire', 'odd', 'even', 'hot fire'],
     ['hot fire', 'odd', 'odd', 'hot fire'],
-  ])('(%s, %s) throws %s', (operation, a, b, c) => {
+  ])('(%s, %s, %s) throws %s', (operation, a, b, c) => {
     expect(() => { expect(mod.getParity(operation, a, b)) }).toThrow(c)
   })
 })
