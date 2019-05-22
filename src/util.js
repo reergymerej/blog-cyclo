@@ -10,8 +10,11 @@ export const doTernary = (testFn, truthyFn, falsyFn) => (...args) =>
 
 export const ifThen = (testFn, truthyFn) => doTernary(testFn, truthyFn, undef)
 
-export const both = (x) => (a, b) => (a === x && b === x)
-export const either = (x) => (a, b) => (a === x || b === x)
+const getLowerCaseComparator = (a) => a.toLowerCase ? a.toLowerCase() : a
+const lowerCompare = (a, b) => getLowerCaseComparator(a) === getLowerCaseComparator(b)
+
+export const both = (x) => (a, b) => (lowerCompare(a, x) && lowerCompare(b, x))
+export const either = (x) => (a, b) => (lowerCompare(a, x) || lowerCompare(b, x))
 
 export const get = (x) => () => x
 export const undef = get()
@@ -34,13 +37,21 @@ export const applyToOtherArg = (fn, value) => conditionallyCall([
   ],
 ], undef)
 
-const notIn = (list, value) => {
-  if (!list.includes(value)) {
-    return value
+const lower = (x) => x.toLowerCase()
+
+const notIn = (list) => {
+  const loweredList = list.map(lower)
+  return (value) => {
+    if (!loweredList.includes(value.toLowerCase())) {
+      return value
+    }
   }
 }
 
-const findNotIn = (list) => (...args) => args.find(x => notIn(list, x))
+const findNotIn = (list) => {
+  const notInList = notIn(list)
+  return (...args) => args.find(notInList)
+}
 
 export const prefix = (a, b) => `${a}${b}`
 export const has = (value) => (a, b) => a === value || b === value

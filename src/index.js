@@ -58,9 +58,10 @@ const createListGate = (list) => createWhitelistChecker(list, handleUnknownOptio
 const directionWhitelist = createListGate(['N', 'E', 'W', 'S'])
 const colorWhitelist = createListGate(['red', 'yellow', 'blue'])
 
+const upper = a => a.toUpperCase()
 export const mixDirections = (a, b) => {
   directionWhitelist(a, b)
-  return prefix(a, b)
+  return prefix(...([a, b].map(upper)))
 }
 
 export const mixColors = conditionallyCall([

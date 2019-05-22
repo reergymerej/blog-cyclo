@@ -28,9 +28,9 @@ describe('mixColors', () => {
 
 describe('mixDirections', () => {
   const input = [
-    ['N', 'W', 'NW'],
+    ['N', 'w', 'NW'],
     ['N', 'E', 'NE'],
-    ['S', 'W', 'SW'],
+    ['s', 'W', 'SW'],
     ['S', 'E', 'SE'],
   ]
 
@@ -48,10 +48,10 @@ describe('mixDirections', () => {
 
 describe('getProductSign', () => {
   const input = [
-    ['positive', 'positive', 'positive'],
-    ['positive', 'negative', 'negative'],
-    ['negative', 'positive', 'negative'],
-    ['negative', 'negative', 'positive'],
+    ['positIve', 'posITIve', 'positive'],
+    ['positiVe', 'neGATive', 'negative'],
+    ['negative', 'poSITive', 'negative'],
+    ['negatIVe', 'negative', 'positive'],
   ]
 
   test.each(input)('getProductSign(%s, %s)', (a, b, expected) => {
@@ -59,9 +59,9 @@ describe('getProductSign', () => {
   })
 
   it.each([
-    ['positive', 'banana', 'banana'],
+    ['positiVe', 'banana', 'banana'],
     ['negative', 'bonanza', 'bonanza'],
-    ['spoon', 'negative', 'spoon'],
+    ['spoon', 'negaTIve', 'spoon'],
     ['fork', 'positive', 'fork'],
   ])('(%s, %s) throws %s', (a, b, c) => {
     expect(() => { expect(mod.getProductSign(a, b)) }).toThrow(c)
@@ -71,12 +71,12 @@ describe('getProductSign', () => {
 describe('getParity', () => {
   const input = [
     ['addition', 'even', 'even', 'even'],
-    ['addition', 'even', 'odd', 'odd'],
+    ['addition', 'evEn', 'odd', 'odd'],
     ['addition', 'odd', 'even', 'odd'],
     ['addition', 'odd', 'odd', 'even'],
 
     ['subtraction', 'even', 'even', 'even'],
-    ['subtraction', 'even', 'odd', 'odd'],
+    ['subtraction', 'even', 'oDd', 'odd'],
     ['subtraction', 'odd', 'even', 'odd'],
     ['subtraction', 'odd', 'odd', 'even'],
 
@@ -92,8 +92,8 @@ describe('getParity', () => {
 
   it.each([
     ['multiplication', 'odd', 'cheese', 'cheese'],
-    ['multiplication', 'even', 'cheese', 'cheese'],
-    ['multiplication', 'cheese', 'odd', 'cheese'],
+    ['multiplicaTIOn', 'eVen', 'cheese', 'cheese'],
+    ['multiplication', 'cheese', 'odD', 'cheese'],
     ['multiplication', 'cheese', 'even', 'cheese'],
 
     ['addition', 'odd', 'cheese', 'cheese'],
