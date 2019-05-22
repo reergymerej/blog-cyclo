@@ -57,6 +57,15 @@ describe('getProductSign', () => {
   test.each(input)('getProductSign(%s, %s)', (a, b, expected) => {
     expect(mod.getProductSign(a, b)).toBe(expected)
   })
+
+  it.each([
+    ['positive', 'banana', 'banana'],
+    ['negative', 'bonanza', 'bonanza'],
+    ['spoon', 'negative', 'spoon'],
+    ['fork', 'positive', 'fork'],
+  ])('(%s, %s) throws %s', (a, b, c) => {
+    expect(() => { expect(mod.getProductSign(a, b)) }).toThrow(c)
+  })
 })
 
 describe('getParity', () => {

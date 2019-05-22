@@ -41,7 +41,7 @@ const mixBlue = doTernary(
 const duplicate = fn => ([fn, fn])
 
 const getParityAddition = conditionallyCall([
-  duplicate(parityAdditionBothOdd),
+  duplicate(parityAdditionBothOdd), // TODO: find a better way to share the result
   duplicate(parityAdditionEitherOdd),
 ], even)
 
@@ -64,7 +64,7 @@ export const mixDirections = (a, b) => {
 }
 
 export const mixColors = conditionallyCall([
-  [colorWhitelist, () => 999],
+  [colorWhitelist],
   [hasRed, applyToOtherArg(mixRed, 'red')],
   [hasBlue, applyToOtherArg(mixBlue, 'blue')],
 ], undef)
@@ -78,7 +78,9 @@ export const getParity = doTernary(
     applyToArgs(getParityAddition, [1, 2]),
 )
 
+const productSignWhiteList = createListGate(['positive', 'negative'])
 export const getProductSign = conditionallyCall([
+  [productSignWhiteList],
   [both('negative'), positive],
   [either('negative'), negative],
 ], positive)
