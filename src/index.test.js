@@ -75,10 +75,10 @@ describe('getParity', () => {
     ['addition', 'odd', 'even', 'odd'],
     ['addition', 'odd', 'odd', 'even'],
 
-    ['subtration', 'even', 'even', 'even'],
-    ['subtration', 'even', 'odd', 'odd'],
-    ['subtration', 'odd', 'even', 'odd'],
-    ['subtration', 'odd', 'odd', 'even'],
+    ['subtraction', 'even', 'even', 'even'],
+    ['subtraction', 'even', 'odd', 'odd'],
+    ['subtraction', 'odd', 'even', 'odd'],
+    ['subtraction', 'odd', 'odd', 'even'],
 
     ['multiplication', 'even', 'even', 'even'],
     ['multiplication', 'even', 'odd', 'even'],
@@ -100,6 +100,11 @@ describe('getParity', () => {
     ['addition', 'even', 'cheese', 'cheese'],
     ['addition', 'cheese', 'odd', 'cheese'],
     ['addition', 'cheese', 'even', 'cheese'],
+
+    ['hot fire', 'even', 'even', 'hot fire'],
+    ['hot fire', 'even', 'odd', 'hot fire'],
+    ['hot fire', 'odd', 'even', 'hot fire'],
+    ['hot fire', 'odd', 'odd', 'hot fire'],
   ])('(%s, %s) throws %s', (operation, a, b, c) => {
     expect(() => { expect(mod.getParity(operation, a, b)) }).toThrow(c)
   })

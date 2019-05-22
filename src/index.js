@@ -69,15 +69,13 @@ export const mixColors = conditionallyCall([
   [hasBlue, applyToOtherArg(mixBlue, 'blue')],
 ], undef)
 
+const parityOperatorWhiteList = createListGate(['multiplication', 'addition', 'subtraction'])
 const parityWhiteList = createListGate(['odd', 'even'])
 
-const getParityMultiplication = conditionallyCall([
-    [parityWhiteList],
-],
-  doTernary(equal, first, even)
-  )
+const getParityMultiplication = doTernary(equal, first, even)
 
 export const getParity = conditionallyCall([
+  [ applyToArgs(parityOperatorWhiteList, [0])],
   [ applyToArgs(parityWhiteList, [1, 2])],
   [ testArg(0, is('multiplication')),
     applyToArgs(getParityMultiplication, [1, 2]) ],
