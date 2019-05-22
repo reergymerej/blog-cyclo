@@ -13,6 +13,17 @@ describe('mixColors', () => {
   test.each(input)('mixColors(%s, %s)', (a, b, expected) => {
     expect(mod.mixColors(a, b)).toBe(expected)
   })
+
+  it.each([
+    ['brown', 'red', 'brown'],
+    ['red', 'taupe', 'taupe'],
+    ['blue', 'taupe', 'taupe'],
+    ['chartreuse', 'blue', 'chartreuse'],
+    ['yellow', 'mauve', 'mauve'],
+    ['grey', 'yellow', 'grey'],
+  ])('(%s, %s) throws %s', (a, b, c) => {
+    expect(() => { expect(mod.mixColors(a, b)) }).toThrow(c)
+  })
 })
 
 describe('mixDirections', () => {
@@ -25,6 +36,13 @@ describe('mixDirections', () => {
 
   test.each(input)('mixDirections(%s, %s)', (a, b, expected) => {
     expect(mod.mixDirections(a, b)).toBe(expected)
+  })
+
+  it.each([
+    ['N', 'X', 'X'],
+    ['X', 'E', 'X'],
+  ])('(%s, %s) throws %s', (a, b, c) => {
+    expect(() => { expect(mod.mixDirections(a, b)) }).toThrow(c)
   })
 })
 
