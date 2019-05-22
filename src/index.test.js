@@ -89,4 +89,13 @@ describe('getParity', () => {
   test.each(input)('getParity(%s, %s)', (operation, a, b, expected) => {
     expect(mod.getParity(operation, a, b)).toBe(expected)
   })
+
+  it.each([
+    ['multiplication', 'odd', 'cheese', 'cheese'],
+    ['multiplication', 'even', 'cheese', 'cheese'],
+    ['multiplication', 'cheese', 'odd', 'cheese'],
+    ['multiplication', 'cheese', 'even', 'cheese'],
+  ])('(%s, %s) throws %s', (operation, a, b, c) => {
+    expect(() => { expect(mod.getParity(operation, a, b)) }).toThrow(c)
+  })
 })
