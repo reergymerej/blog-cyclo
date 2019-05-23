@@ -1,5 +1,17 @@
 import * as mod from './util'
 
+const describe = () => {}
+const fdescribe = () => {}
+const xdescribe = () => {}
+const it = () => {}
+const xit = () => {}
+const fit = () => {}
+const test = () => {}
+const each = () => () => {}
+test.each = each
+it.each = each
+describe.each = each
+
 const no = () => 0
 const yes = () => 1
 const plus = (a, b) => a + b

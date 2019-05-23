@@ -7,27 +7,26 @@
     "start": "babel-node src/index.js",
     "test": "./node_modules/.bin/tape -r babel-register **/*.test.js | /Users/jeremygreer/code/tap-formatter/bin/cmd.js",
     "test:watch": "nodemon -q -x \"clear; ./node_modules/.bin/tape -r babel-register **/*.test.js | /Users/jeremygreer/code/tap-formatter/bin/cmd.js\"",
+    "test:naked": "nodemon -q -x \"clear; ./node_modules/.bin/tape -r babel-register **/*.test.js\"",
     "coverage": "istanbul cover tape -r babel-register **/*.test.js",
     "lint": "eslint src",
     "build": "babel src -d lib --ignore '**/*.test.js,__mocks__'",
-    "test-report": "yarn test --coverage",
+    "test-report": "yarn coverage",
     "lint-report": "yarn lint --format json --output-file eslint-report.json",
     "report": "yarn test-report && yarn lint-report && sonar-scanner"
   },
   "author": "Jeremy Greer <jex.grizzle@gmail.com>",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "babel-cli": "^6.9.0",
     "babel-core": "^6",
     "babel-eslint": "7",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
     "eslint": "3.x",
     "istanbul": "^0.4.5",
     "nodemon": "^1.19.0",
     "tape": "^4.10.1"
-  },
-  "devDependencies": {
-    "babel-register": "^6.26.0"
   }
 }
