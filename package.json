@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node src/main.js",
-    "test": "jest src --config jest.config.js",
+    "start": "babel-node src/index.js",
+    "test": "./node_modules/.bin/tape -r babel-register **/*.test.js | /Users/jeremygreer/code/tap-formatter/bin/cmd.js",
+    "test:watch": "nodemon -q -x \"clear; ./node_modules/.bin/tape -r babel-register **/*.test.js | /Users/jeremygreer/code/tap-formatter/bin/cmd.js\"",
+    "coverage": "istanbul cover tape -r babel-register **/*.test.js",
     "lint": "eslint src",
     "build": "babel src -d lib --ignore '**/*.test.js,__mocks__'",
     "test-report": "yarn test --coverage",
@@ -21,6 +23,11 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "eslint": "3.x",
-    "jest": "^23.6.0"
+    "istanbul": "^0.4.5",
+    "nodemon": "^1.19.0",
+    "tape": "^4.10.1"
+  },
+  "devDependencies": {
+    "babel-register": "^6.26.0"
   }
 }
